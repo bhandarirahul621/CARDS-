@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Blackjack</title>
+  <meta name="description" content="A Blackjack game built on the free Deck of Cards API." />
+  <link rel="icon" href="https://deckofcardsapi.com/static/img/AS.png" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="table">
+    <header class="topbar">
+      <h1>Blackjack</h1>
+      <div class="stats">
+        <span>Bank: <strong id="bank">$1000</strong></span>
+        <span>Bet: <strong id="bet">$0</strong></span>
+        <span class="shoe">Shoe: <strong id="remaining">–</strong> cards</span>
+      </div>
+    </header>
+
+    <section class="hand-area" aria-label="Dealer's hand">
+      <h2>Dealer <span class="score" id="dealer-score"></span></h2>
+      <div class="cards" id="dealer-cards"></div>
+    </section>
+
+    <p class="message" id="message" role="status" aria-live="polite">Place your bet to begin.</p>
+
+    <section class="hand-area" aria-label="Your hand">
+      <h2>You <span class="score" id="player-score"></span></h2>
+      <div class="cards" id="player-cards"></div>
+    </section>
+
+    <section class="controls">
+      <div class="chips" id="chips">
+        <button class="chip" data-amount="10">$10</button>
+        <button class="chip" data-amount="25">$25</button>
+        <button class="chip" data-amount="50">$50</button>
+        <button class="chip" data-amount="100">$100</button>
+        <button class="btn ghost" id="clear-bet">Clear</button>
+      </div>
+      <div class="actions">
+        <button class="btn primary" id="deal">Deal</button>
+        <button class="btn" id="hit" disabled>Hit</button>
+        <button class="btn" id="stand" disabled>Stand</button>
+        <button class="btn" id="double" disabled>Double</button>
+      </div>
+      <button class="btn ghost small" id="reset-bank">Reset bank</button>
+    </section>
+
+    <footer class="footer">
+      Cards dealt by the <a href="https://deckofcardsapi.com/" target="_blank" rel="noopener">Deck of Cards API</a>
+      · 6-deck shoe · Blackjack pays 3:2 · Dealer stands on 17
+    </footer>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
