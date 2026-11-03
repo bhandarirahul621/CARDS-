@@ -9,12 +9,12 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- Shown for a moment while we check whether you're already logged in -->
+  <!-- Shown while we check whether you're logged in / load your profile -->
   <div class="auth-loading" id="auth-loading">Shuffling up…</div>
 
-  <!-- Login screen: visible when nobody is signed in -->
-  <section class="login-screen" id="login-screen" hidden>
-    <div class="login-card">
+  <!-- 1. Login screen: visible when nobody is signed in -->
+  <section class="center-screen" id="login-screen" hidden>
+    <div class="panel login-card">
       <img class="login-cards" src="https://deckofcardsapi.com/static/img/AS.png" alt="" />
       <h1>Blackjack</h1>
       <p>Sign in to take a seat at the table.</p>
@@ -31,56 +31,136 @@
     </div>
   </section>
 
+  <!-- 2. Onboarding: first visit after signing in, create your profile -->
+  <section class="center-screen" id="onboarding" hidden>
+    <form class="panel profile-form" id="onboarding-form" novalidate>
+      <div class="form-head">
+        <img class="avatar avatar-lg" id="ob-avatar" alt="" referrerpolicy="no-referrer" hidden />
+        <span class="avatar avatar-lg avatar-initial" id="ob-avatar-initial" aria-hidden="true"></span>
+        <div>
+          <h1>Create your profile</h1>
+          <p class="muted">This is how you'll show up at the table.</p>
+        </div>
+      </div>
+
+      <label for="ob-display-name">Display name</label>
+      <input id="ob-display-name" maxlength="50" autocomplete="name" required />
+
+      <label for="ob-username">Username</label>
+      <div class="input-prefix"><span>@</span><input id="ob-username" maxlength="20" autocomplete="username" pattern="[A-Za-z0-9_]{3,20}" required /></div>
+      <small class="muted">3–20 letters, numbers or underscores.</small>
+
+      <label for="ob-bio">Bio <span class="muted">(optional)</span></label>
+      <textarea id="ob-bio" maxlength="280" rows="3" placeholder="High roller? Card counter? Tell the table."></textarea>
+
+      <p class="form-status" id="ob-status" role="alert"></p>
+      <button class="btn primary wide" type="submit">Create profile &amp; play</button>
+    </form>
+  </section>
+
+  <!-- 3. The app: greeting bar, tabs, and the two tab panels -->
   <main class="table" id="game" hidden>
     <div class="userbar">
       <div class="user">
         <img class="avatar" id="avatar" alt="" referrerpolicy="no-referrer" hidden />
         <span class="avatar avatar-initial" id="avatar-initial" aria-hidden="true"></span>
-        <div>
+        <div class="user-text">
           <div class="greeting" id="greeting"></div>
-          <div class="user-email" id="user-email"></div>
+          <div class="user-handle" id="user-handle"></div>
         </div>
       </div>
       <button class="btn ghost small" id="sign-out">Sign out</button>
     </div>
 
-    <header class="topbar">
-      <h1>Blackjack</h1>
-      <div class="stats">
-        <span>Bank: <strong id="bank">$1000</strong></span>
-        <span>Bet: <strong id="bet">$0</strong></span>
-        <span class="shoe">Shoe: <strong id="remaining">–</strong> cards</span>
-      </div>
-    </header>
+    <nav class="tabs" role="tablist" aria-label="Sections">
+      <button role="tab" data-tab="table" aria-controls="tab-table" aria-selected="true">Table</button>
+      <button role="tab" data-tab="profile" aria-controls="tab-profile" aria-selected="false">Profile</button>
+    </nav>
 
-    <section class="hand-area" aria-label="Dealer's hand">
-      <h2>Dealer <span class="score" id="dealer-score"></span></h2>
-      <div class="cards" id="dealer-cards"></div>
-    </section>
+    <!-- Tab: the Blackjack table -->
+    <div class="tab-panel" id="tab-table" role="tabpanel">
+      <header class="topbar">
+        <h1>Blackjack</h1>
+        <div class="stats">
+          <span>Bank: <strong id="bank">$1000</strong></span>
+          <span>Bet: <strong id="bet">$0</strong></span>
+          <span class="shoe">Shoe: <strong id="remaining">–</strong> cards</span>
+        </div>
+      </header>
 
-    <p class="message" id="message" role="status" aria-live="polite">Place your bet to begin.</p>
+      <section class="hand-area" aria-label="Dealer's hand">
+        <h2>Dealer <span class="score" id="dealer-score"></span></h2>
+        <div class="cards" id="dealer-cards"></div>
+      </section>
 
-    <section class="hand-area" aria-label="Your hand">
-      <h2>You <span class="score" id="player-score"></span></h2>
-      <div class="cards" id="player-cards"></div>
-    </section>
+      <p class="message" id="message" role="status" aria-live="polite">Place your bet to begin.</p>
 
-    <section class="controls">
-      <div class="chips" id="chips">
-        <button class="chip" data-amount="10">$10</button>
-        <button class="chip" data-amount="25">$25</button>
-        <button class="chip" data-amount="50">$50</button>
-        <button class="chip" data-amount="100">$100</button>
-        <button class="btn ghost" id="clear-bet">Clear</button>
-      </div>
-      <div class="actions">
-        <button class="btn primary" id="deal">Deal</button>
-        <button class="btn" id="hit" disabled>Hit</button>
-        <button class="btn" id="stand" disabled>Stand</button>
-        <button class="btn" id="double" disabled>Double</button>
-      </div>
-      <button class="btn ghost small" id="reset-bank">Reset bank</button>
-    </section>
+      <section class="hand-area" aria-label="Your hand">
+        <h2>You <span class="score" id="player-score"></span></h2>
+        <div class="cards" id="player-cards"></div>
+      </section>
+
+      <section class="controls">
+        <div class="chips" id="chips">
+          <button class="chip" data-amount="10">$10</button>
+          <button class="chip" data-amount="25">$25</button>
+          <button class="chip" data-amount="50">$50</button>
+          <button class="chip" data-amount="100">$100</button>
+          <button class="btn ghost" id="clear-bet">Clear</button>
+        </div>
+        <div class="actions">
+          <button class="btn primary" id="deal">Deal</button>
+          <button class="btn" id="hit" disabled>Hit</button>
+          <button class="btn" id="stand" disabled>Stand</button>
+          <button class="btn" id="double" disabled>Double</button>
+        </div>
+        <button class="btn ghost small" id="reset-bank">Reset bank</button>
+      </section>
+    </div>
+
+    <!-- Tab: the player's profile -->
+    <div class="tab-panel" id="tab-profile" role="tabpanel" hidden>
+      <article class="panel profile-card" id="profile-card">
+        <div class="form-head">
+          <img class="avatar avatar-lg" id="p-avatar" alt="" referrerpolicy="no-referrer" hidden />
+          <span class="avatar avatar-lg avatar-initial" id="p-avatar-initial" aria-hidden="true"></span>
+          <div class="profile-id">
+            <h1 id="p-name"></h1>
+            <div class="muted" id="p-username"></div>
+            <div class="muted small-text" id="p-since"></div>
+          </div>
+          <button class="btn small" id="edit-profile" type="button">Edit</button>
+        </div>
+        <p class="bio" id="p-bio"></p>
+        <dl class="stat-grid">
+          <div><dt>Bank</dt><dd id="p-bank"></dd></div>
+          <div><dt>Best bank</dt><dd id="p-best"></dd></div>
+          <div><dt>Hands played</dt><dd id="p-played"></dd></div>
+          <div><dt>Hands won</dt><dd id="p-won"></dd></div>
+          <div><dt>Win rate</dt><dd id="p-rate"></dd></div>
+        </dl>
+      </article>
+
+      <form class="panel profile-form" id="edit-form" novalidate hidden>
+        <h1>Edit profile</h1>
+
+        <label for="ed-display-name">Display name</label>
+        <input id="ed-display-name" maxlength="50" required />
+
+        <label for="ed-username">Username</label>
+        <div class="input-prefix"><span>@</span><input id="ed-username" maxlength="20" pattern="[A-Za-z0-9_]{3,20}" required /></div>
+        <small class="muted">3–20 letters, numbers or underscores.</small>
+
+        <label for="ed-bio">Bio</label>
+        <textarea id="ed-bio" maxlength="280" rows="3"></textarea>
+
+        <p class="form-status" id="ed-status" role="alert"></p>
+        <div class="form-actions">
+          <button class="btn ghost" id="cancel-edit" type="button">Cancel</button>
+          <button class="btn primary" type="submit">Save</button>
+        </div>
+      </form>
+    </div>
 
     <footer class="footer">
       Cards dealt by the <a href="https://deckofcardsapi.com/" target="_blank" rel="noopener">Deck of Cards API</a>
@@ -89,7 +169,9 @@
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.js"></script>
-  <script src="auth.js"></script>
+  <script src="supabase-client.js"></script>
   <script src="app.js"></script>
+  <script src="profile.js"></script>
+  <script src="auth.js"></script>
 </body>
 </html>

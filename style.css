@@ -121,32 +121,36 @@ button:disabled { opacity: 0.4; cursor: not-allowed; }
   .chip { width: 52px; height: 52px; font-size: 0.85rem; }
 }
 
-/* ---------- Login & user greeting ---------- */
+/* ---------- Screens: loading, login, onboarding ---------- */
 [hidden] { display: none !important; }
 
 .auth-loading {
   min-height: 100vh;
   display: grid;
   place-items: center;
+  padding: 16px;
+  text-align: center;
   color: var(--muted);
 }
 
-.login-screen {
+.center-screen {
   min-height: 100vh;
   display: grid;
   place-items: center;
   padding: 16px;
 }
 
-.login-card {
+.panel {
   width: 100%;
-  max-width: 360px;
-  padding: 32px 24px;
-  text-align: center;
   border-radius: 16px;
   background: rgba(0, 0, 0, 0.25);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
 }
+
+.muted { color: var(--muted); }
+.small-text { font-size: 0.8rem; }
+
+.login-card { max-width: 360px; padding: 32px 24px; text-align: center; }
 .login-card h1 { font-size: 2.2rem; margin: 12px 0 4px; }
 .login-card p { color: var(--muted); margin: 0 0 24px; }
 .login-cards { width: 72px; border-radius: 6px; transform: rotate(-8deg); box-shadow: 0 4px 10px rgba(0,0,0,.4); }
@@ -166,6 +170,72 @@ button:disabled { opacity: 0.4; cursor: not-allowed; }
 .google-btn:not(:disabled):hover { background: #f1f3f4; }
 .login-error { color: #ffb4b4; margin: 16px 0 0 !important; font-size: 0.9rem; }
 
+/* ---------- Avatars ---------- */
+.avatar {
+  width: 44px;
+  height: 44px;
+  flex: none;
+  border-radius: 50%;
+  border: 2px solid var(--gold);
+  object-fit: cover;
+}
+.avatar-lg { width: 72px; height: 72px; border-width: 3px; }
+.avatar-initial {
+  display: grid;
+  place-items: center;
+  background: var(--gold);
+  color: #222;
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+.avatar-lg.avatar-initial { font-size: 2rem; }
+
+/* ---------- Profile forms (onboarding + edit) ---------- */
+.profile-form {
+  max-width: 440px;
+  margin: 0 auto;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.profile-form h1 { font-size: 1.5rem; margin: 0; }
+.profile-form p { margin: 2px 0 0; }
+.profile-form label { margin-top: 12px; font-weight: 600; font-size: 0.9rem; }
+.profile-form small { font-size: 0.78rem; }
+
+.profile-form input,
+.profile-form textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(0, 0, 0, 0.3);
+  color: var(--text);
+  font: inherit;
+}
+.profile-form textarea { resize: vertical; }
+.profile-form input:focus,
+.profile-form textarea:focus { outline: 2px solid var(--gold); outline-offset: 1px; }
+
+.input-prefix { display: flex; align-items: center; }
+.input-prefix span {
+  padding: 10px 0 10px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-right: none;
+  border-radius: 8px 0 0 8px;
+  background: rgba(0, 0, 0, 0.3);
+  color: var(--muted);
+}
+.input-prefix input { border-radius: 0 8px 8px 0; border-left: none; padding-left: 2px; }
+
+.form-head { display: flex; align-items: center; gap: 16px; }
+.form-status { min-height: 1.2em; font-size: 0.9rem; }
+.form-status.error { color: #ffb4b4; }
+.form-actions { display: flex; justify-content: flex-end; gap: 8px; }
+.btn.wide { width: 100%; margin-top: 4px; }
+
+/* ---------- Greeting bar & tabs ---------- */
 .userbar {
   display: flex;
   justify-content: space-between;
@@ -176,27 +246,54 @@ button:disabled { opacity: 0.4; cursor: not-allowed; }
   background: rgba(0, 0, 0, 0.2);
 }
 .user { display: flex; align-items: center; gap: 12px; min-width: 0; }
-.avatar {
-  width: 44px;
-  height: 44px;
-  flex: none;
-  border-radius: 50%;
-  border: 2px solid var(--gold);
-  object-fit: cover;
-}
-.avatar-initial {
-  display: grid;
-  place-items: center;
-  background: var(--gold);
-  color: #222;
-  font-weight: 700;
-  font-size: 1.2rem;
-}
+.user-text { min-width: 0; }
 .greeting { font-weight: 700; font-size: 1.05rem; }
-.user-email {
+.user-handle {
   color: var(--muted);
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.tabs {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.25);
+  align-self: center;
+}
+.tabs button {
+  padding: 8px 22px;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  font-weight: 600;
+}
+.tabs button[aria-selected="true"] { background: var(--gold); color: #222; }
+.tabs button:not([aria-selected="true"]):hover { color: var(--text); }
+
+.tab-panel { display: flex; flex-direction: column; gap: 16px; }
+
+/* ---------- Profile card ---------- */
+.profile-card { max-width: 560px; margin: 0 auto; padding: 24px; }
+.profile-id { flex: 1; min-width: 0; }
+.profile-id h1 { font-size: 1.5rem; margin: 0; overflow-wrap: anywhere; }
+.bio { margin: 16px 0; line-height: 1.5; white-space: pre-wrap; overflow-wrap: anywhere; }
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 10px;
+  margin: 0;
+}
+.stat-grid div { padding: 12px; border-radius: 10px; background: rgba(0, 0, 0, 0.25); }
+.stat-grid dt { font-size: 0.78rem; color: var(--muted); }
+.stat-grid dd { margin: 4px 0 0; font-size: 1.3rem; font-weight: 700; color: var(--gold); }
+
+@media (max-width: 520px) {
+  .avatar-lg { width: 56px; height: 56px; }
+  .profile-card, .profile-form { padding: 18px; }
 }

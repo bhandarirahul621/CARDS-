@@ -173,8 +173,9 @@ function finishRound() {
     [outcome, payout] = ["push", bet];
     flash("Both have Blackjack. Push.");
   } else if (isBlackjack(state.player)) {
-    [outcome, payout] = ["win", bet + bet * 1.5];
-    flash(`Blackjack! You win $${bet * 1.5}.`, "win");
+    const bonus = Math.floor(bet * 1.5); // 3:2, rounded down to whole dollars
+    [outcome, payout] = ["win", bet + bonus];
+    flash(`Blackjack! You win $${bonus}.`, "win");
   } else if (isBlackjack(state.dealer)) {
     [outcome, payout] = ["lose", 0];
     flash("Dealer has Blackjack.", "lose");
@@ -201,8 +202,10 @@ function finishRound() {
   if (state.bank <= 0) flash("You're out of money. Hit “Reset bank” to play again.", "lose");
 
   state.phase = "betting";
-  state.lastOutcome = outcome;
   render();
+
+  // Let the profile code record this hand in the database.
+  document.dispatchEvent(new CustomEvent("blackjack:round", { detail: { outcome, bank: state.bank } }));
 }
 
 // ---------------------------------------------------------------------------
@@ -321,6 +324,22 @@ $("reset-bank").addEventListener("click", () => {
   saveBank();
   flash("Bank reset to $1000. Place your bet.");
   render();
+  document.dispatchEvent(new CustomEvent("blackjack:bank", { detail: { bank: state.bank } }));
 });
+
+// Called by profile.js when a player signs in: start a fresh table with their saved bank.
+window.Blackjack = {
+  loadPlayer(bank) {
+    state.bank = bank;
+    state.bet = 0;
+    state.player = [];
+    state.dealer = [];
+    state.doubled = false;
+    state.phase = "betting";
+    saveBank();
+    flash(bank > 0 ? "Place your bet to begin." : "You're out of money. Hit “Reset bank” to play again.", bank > 0 ? "" : "lose");
+    render();
+  },
+};
 
 render();
