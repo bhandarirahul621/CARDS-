@@ -16,6 +16,21 @@ The API is the **dealer's shoe**. It shuffles and hands out cards. Everything el
 The API's *piles* feature doesn't work with multi-deck shoes, so each hand is kept
 in JavaScript instead.
 
+## Google login (Supabase Auth)
+
+Players sign in with Google before they can play. Once signed in, they see a greeting
+with their name, email and Google profile picture.
+
+- `auth.js` creates the Supabase client with the project URL and **publishable** key.
+  Those are designed to be public; never put the secret/service_role key in this repo.
+- Flow: site → Supabase → Google → `https://masrtghpydxbacufdswg.supabase.co/auth/v1/callback` → back to the site.
+
+**One-time Supabase setup** (Dashboard → Authentication → URL Configuration):
+
+- **Site URL:** your Netlify URL, e.g. `https://your-site.netlify.app`
+- **Redirect URLs:** add your Netlify URL and `http://localhost:8000` for local testing.
+  If a URL isn't listed, Supabase sends people to the Site URL instead.
+
 ## House rules
 
 - 6-deck shoe, reshuffled at 25% remaining
@@ -29,6 +44,7 @@ in JavaScript instead.
 - `index.html`: page structure
 - `style.css`: the green-felt look
 - `app.js`: game logic and API calls
+- `auth.js`: Google login, greeting, sign out
 - `netlify.toml`: Netlify deploy settings
 
 ## Run locally
